@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class S_MovementScript : MonoBehaviour
@@ -8,6 +9,14 @@ public class S_MovementScript : MonoBehaviour
     float SmoothTurnVelocity;
     public float SmoothTurnTime = 0.1f;
     public bool Dialogue = false;
+    public S_DialogueScript CurrentDialogueChar; 
+    public TextMeshProUGUI dialTitle;
+    public TextMeshProUGUI dialogue;
+    private int dialcount = 0;
+
+    void Start(){
+        dialTitle.enabled = dialogue.enabled = false;
+    }
 
     // Update is called once per frame
     void Update()
@@ -25,8 +34,22 @@ public class S_MovementScript : MonoBehaviour
             cc.Move(MoveDir*speed*Time.deltaTime);
         }
 
-        if(Dialogue&&Input.GetKeyDown("F")){
+        if(Dialogue&&Input.GetKeyDown("f")){
             //Do Dialogue Stuff here
+            if (!dialTitle.enabled){
+                dialTitle.enabled = true;
+                dialogue.enabled = true;
+            }
+            dialTitle.text = CurrentDialogueChar.dialogue[dialcount][0];
+            dialogue.text = CurrentDialogueChar.dialogue[dialcount][1];
+            dialcount++;
+        }
+
+        if(!Dialogue){
+            dialTitle.enabled = false;
+            dialogue.enabled = false;
+            dialcount = 0;
+
         }
     }
 }
