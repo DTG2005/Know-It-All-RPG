@@ -42,6 +42,7 @@ public class S_MovementScript : MonoBehaviour
             }
             dialTitle.text = CurrentDialogueChar.dialogue[dialcount][0];
             dialogue.text = CurrentDialogueChar.dialogue[dialcount][1];
+            CurrentDialogueChar.GetComponent<S_DialogueScript>().isCurrentQuestNPC = false;
             dialcount++;
         }
 

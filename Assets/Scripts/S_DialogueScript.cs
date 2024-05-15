@@ -9,6 +9,8 @@ public class S_DialogueScript : MonoBehaviour
 {
     public List<List<string>> dialogue = new List<List<string>>{};
     public S_MovementScript mvmscrpt;
+
+    public bool isCurrentQuestNPC = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +24,9 @@ public class S_DialogueScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(!isCurrentQuestNPC){
+            this.transform.Find("marker").gameObject.SetActive(false);
+        }
     }
 
     void OnTriggerEnter(Collider collider){
