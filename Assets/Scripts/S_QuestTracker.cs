@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using JetBrains.Annotations;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class S_QuestTracker : MonoBehaviour
@@ -12,13 +14,15 @@ public class S_QuestTracker : MonoBehaviour
     public TextMeshProUGUI questTitle;
     public CharacterController cc;
     public TextMeshProUGUI questJob;
-    private int questLevelCount = 1;
+    private int questLevelCount = 2;
     private GameObject questIndicator;
+    private float timer = 0;
+    private bool isTimerAlreadyActive = false;
 
     void Start(){
         List<string> name = new List<string>{"Test Quest",};
         List<string> Task1 = new List<string>{"Talk to Agent", "Talk:Agent"};
-        List<string> Task2 = new List<string>{"Roam around the environment", "Roam:ProgScene1"};
+        List<string> Task2 = new List<string>{"Roam around the environment", "Roam:15"};
         testQuest.Add(name);
         testQuest.Add(Task1);
         testQuest.Add(Task2);
@@ -42,8 +46,17 @@ public class S_QuestTracker : MonoBehaviour
                 cc.enabled = true;
             }
         }
-        if(!questIndicator.GetComponent<S_DialogueScript>().isCurrentQuestNPC){
-            questLevelCount++;
+        // if(!questIndicator.GetComponent<S_DialogueScript>().isCurrentQuestNPC){
+        //     questLevelCount++;
+        //     ChecknUpdateQuest();
+        // }
+        if(timer>0){
+            timer-=Time.deltaTime;
+            if (timer<0){
+                timer = 0;
+                ChecknUpdateQuest();
+                Debug.Log("Done");
+            }
         }
     }
 
@@ -54,7 +67,10 @@ public class S_QuestTracker : MonoBehaviour
             questIndicator.transform.Find("marker").gameObject.SetActive(true);
         } else if (testQuest[questLevelCount][1].Split(':')[0] == "Roam")
         {
-        
+            if(!isTimerAlreadyActive){
+                timer = float.Parse(testQuest[questLevelCount][1].Split(':')[1]);
+                isTimerAlreadyActive = true;
+            }
         }
     }
 }
