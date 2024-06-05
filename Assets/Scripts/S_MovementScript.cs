@@ -10,6 +10,7 @@ public class S_MovementScript : MonoBehaviour
     public float SmoothTurnTime = 0.1f;
     public bool Dialogue = false;
     public S_DialogueScript CurrentDialogueChar; 
+    public S_QuestTracker questTracker;
     public TextMeshProUGUI dialTitle;
     public TextMeshProUGUI dialogue;
     private int dialcount = 0;
@@ -42,10 +43,14 @@ public class S_MovementScript : MonoBehaviour
             }
             dialTitle.text = CurrentDialogueChar.dialogue[dialcount][0];
             dialogue.text = CurrentDialogueChar.dialogue[dialcount][1];
+            if(CurrentDialogueChar.isCurrentQuestNPC){
+                CurrentDialogueChar.isCurrentQuestNPC = false;
+                questTracker.questLevelCount++;
+                questTracker.ChecknUpdateQuest();
+            }
             CurrentDialogueChar.GetComponent<S_DialogueScript>().isCurrentQuestNPC = false;
             dialcount++;
         }
-
         if(!Dialogue){
             dialTitle.enabled = false;
             dialogue.enabled = false;

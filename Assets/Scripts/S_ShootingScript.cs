@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class S_ShootingScript : MonoBehaviour
@@ -23,8 +25,8 @@ public class S_ShootingScript : MonoBehaviour
             try {
                 S_EnemyScript gb = hit.transform.GetComponent<S_EnemyScript>();
                 gb.Kill();
-            } catch {
-                
+            } catch (Exception err){
+                Debug.Log(err);
             }
         }
     }

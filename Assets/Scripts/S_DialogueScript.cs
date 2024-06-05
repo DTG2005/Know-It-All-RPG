@@ -9,6 +9,7 @@ public class S_DialogueScript : MonoBehaviour
 {
     public List<List<string>> dialogue = new List<List<string>>{};
     public S_MovementScript mvmscrpt;
+    public S_QuestTracker questTracker;
 
     public bool isCurrentQuestNPC = false;
     // Start is called before the first frame update
@@ -26,6 +27,8 @@ public class S_DialogueScript : MonoBehaviour
     {
         if(!isCurrentQuestNPC){
             this.transform.Find("marker").gameObject.SetActive(false);
+        } else {
+            this.transform.Find("marker").gameObject.SetActive(true);
         }
     }
 

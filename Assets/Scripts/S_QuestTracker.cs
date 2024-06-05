@@ -1,31 +1,29 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using JetBrains.Annotations;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class S_QuestTracker : MonoBehaviour
 {
-    public List<List<string>> testQuest = new List<List<string>>();
+    public List<List<string>> testQuest = new();
     private bool isQuestOpen = false;
     public GameObject QuestMenu;
     public TextMeshProUGUI questTitle;
     public CharacterController cc;
     public TextMeshProUGUI questJob;
-    private int questLevelCount = 2;
-    private GameObject questIndicator;
+    public int questLevelCount = 1;
+    public GameObject questIndicator;
     private float timer = 0;
     private bool isTimerAlreadyActive = false;
 
     void Start(){
-        List<string> name = new List<string>{"Test Quest",};
-        List<string> Task1 = new List<string>{"Talk to Agent", "Talk:Agent"};
-        List<string> Task2 = new List<string>{"Roam around the environment", "Roam:15"};
+        List<string> name = new() { "Test Quest",};
+        List<string> Task1 = new() { "Talk to Agent", "Talk:Agent"};
+        List<string> Task2 = new() { "Kill enemy", "Kill:Enemy"};
+        List<string> Task3 = new() {"Talk to Agent 2", "Talk:Agent (1)"};
         testQuest.Add(name);
         testQuest.Add(Task1);
         testQuest.Add(Task2);
+        testQuest.Add(Task3);
         questTitle.text = testQuest[0][0];
         questJob.text = testQuest[questLevelCount][0];
         QuestMenu.SetActive(false);
@@ -46,31 +44,37 @@ public class S_QuestTracker : MonoBehaviour
                 cc.enabled = true;
             }
         }
-        // if(!questIndicator.GetComponent<S_DialogueScript>().isCurrentQuestNPC){
-        //     questLevelCount++;
-        //     ChecknUpdateQuest();
-        // }
         if(timer>0){
             timer-=Time.deltaTime;
             if (timer<0){
                 timer = 0;
                 ChecknUpdateQuest();
-                Debug.Log("Done");
+                Debug.Log("Done");  
             }
         }
     }
 
-    void ChecknUpdateQuest(){
+    public void ChecknUpdateQuest(){
         if(testQuest[questLevelCount][1].Split(':')[0] == "Talk"){
             questIndicator = GameObject.Find(testQuest[questLevelCount][1].Split(':')[1]);
             questIndicator.GetComponent<S_DialogueScript>().isCurrentQuestNPC = true;
             questIndicator.transform.Find("marker").gameObject.SetActive(true);
+            questIndicator.GetComponent<S_DialogueScript>().questTracker = this;
+            questJob.text = testQuest[questLevelCount][0];
+            Debug.Log("Done");
         } else if (testQuest[questLevelCount][1].Split(':')[0] == "Roam")
         {
             if(!isTimerAlreadyActive){
                 timer = float.Parse(testQuest[questLevelCount][1].Split(':')[1]);
                 isTimerAlreadyActive = true;
             }
+            questIndicator = null;
+        } else if (testQuest[questLevelCount][1].Split(':')[0] == "Kill"){
+            questIndicator = GameObject.Find(testQuest[questLevelCount][1].Split(':')[1]);
+            questIndicator.transform.Find("marker").gameObject.SetActive(true);
+            questJob.text = testQuest[questLevelCount][0];
         }
+        Debug.Log(questIndicator.name);
+        Debug.Log(questLevelCount);
     }
 }
